@@ -1,2 +1,3 @@
 cloud\APIHandler.class
-cloud\URL.class
+cloud\LongURL.class
+cloud\ResponseFound.class

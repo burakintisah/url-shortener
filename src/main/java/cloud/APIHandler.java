@@ -1,16 +1,16 @@
 package cloud;
+
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.KeyAttribute;
-import com.amazonaws.services.dynamodbv2.document.PrimaryKey;
 import com.amazonaws.services.dynamodbv2.document.spec.PutItemSpec;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -35,13 +35,11 @@ public class APIHandler implements RequestStreamHandler {
     private Timestamp get_expiration_date(Timestamp from){
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(from.getTime());
-        cal.add(Calendar.SECOND, 30);
+        cal.add(Calendar.SECOND, 604800);
         return new Timestamp(cal.getTime().getTime());
     }
     private boolean check_id(String short_id){
-        KeyAttribute keyAttribute = new KeyAttribute("short_id",short_id);
-        PrimaryKey primaryKey = new PrimaryKey(keyAttribute);
-        Item item = dynamoDb.getTable(DYNAMODB_TABLE_NAME).getItem(primaryKey);
+        Item item = dynamoDb.getTable(DYNAMODB_TABLE_NAME).getItem("short_id",short_id);
         return item != null;
     }
     private int get_random_number(int min, int max){
@@ -79,10 +77,9 @@ public class APIHandler implements RequestStreamHandler {
         Timestamp timestamp = get_timestamp();
         Timestamp ttl = get_expiration_date(timestamp);
 
-
         try {
             JSONObject event = (JSONObject) parser.parse(reader);
-            URL long_url = new URL((String) event.get("body"));
+            LongURL long_url = new LongURL((String) event.get("body"));
 
             if (event.get("body") != null) {
 
@@ -111,4 +108,47 @@ public class APIHandler implements RequestStreamHandler {
         writer.write(responseJson.toString());
         writer.close();
     }
+
+
+    public void handleGetByParam(InputStream inputStream, OutputStream outputStream, Context context) throws Exception {
+
+        JSONParser parser = new JSONParser();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        JSONObject responseJson = new JSONObject();
+
+        Item result = null;
+        try {
+            JSONObject event = (JSONObject) parser.parse(reader);
+            JSONObject responseBody = new JSONObject();
+            String short_id = (String) event.get("short_id");
+
+            if (short_id != null) {
+                result = dynamoDb.getTable(DYNAMODB_TABLE_NAME).getItem("short_id", short_id);
+            }
+            if (result != null) {
+                JSONObject url = new JSONObject();
+                String long_url = result.getString("long_url");
+                int count = result.getNumber("hits").intValue();
+                result.withNumber("hist", count + 1);
+                responseJson.put("statusCode", 301);
+                throw new Exception(new ResponseFound(long_url));
+            }
+            else {
+                Object message = "Page cannot be found!";
+                responseBody.put("message", message);
+                responseJson.put("statusCode", 404);
+            }
+
+            responseJson.put("body", responseBody.toString());
+
+        } catch (ParseException pex) {
+            responseJson.put("statusCode", 400);
+            responseJson.put("exception", pex);
+        }
+
+        OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
+        writer.write(responseJson.toString());
+        writer.close();
+    }
+
 }
