@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Auth } from "aws-amplify"
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import styled from 'styled-components'
 
 class LogIn extends Component {
     state = {
@@ -59,53 +61,55 @@ class LogIn extends Component {
     render() {
         return (
                 <div className="container">
-                    <h1>Log in</h1>
-
-
-                    <form onSubmit={this.handleSubmit}>
-                        <div>
-                            <p>
-                                <input
-                                    className="input"
-                                    type="text"
-                                    id="username"
-                                    placeholder="Enter username or email"
-                                    value={this.state.username}
-                                    onChange={this.onInputChange}
-                                />
-                            </p>
-                        </div>
-                        <div>
-                            <p>
-                                <input
-                                    className="input"
-                                    type="password"
-                                    id="password"
-                                    placeholder="Password"
-                                    value={this.state.password}
-                                    onChange={this.onInputChange}
-                                />
-                            </p>
-
-                        </div>
-                        <div>
-                            <p>
-                                <a href="/forgotpassword">Forgot password?</a>
-                            </p>
-
-                        </div>
-                        <div>
-                            <p>
-                                <button className="button">
-                                    Login
-                                </button>
-                            </p>
-
-                        </div>
-                    </form>
+                    <LoginContainer >
+                        <Form className="login-form bk" onSubmit={this.handleSubmit}>
+                            <h1 >URL Shortener</h1>
+                            <h2>Login</h2>
+                            <FormGroup className="mt-5 ml-5 mr-5">
+                                <Label> Enter username or email</Label>
+                                <Input  className=""
+                                        type="text" 
+                                        id="username"
+                                        placeholder="Username or Email"  
+                                        value={this.state.username}
+                                        onChange={this.onInputChange} />
+                            </FormGroup>
+                            <FormGroup className="ml-5 mr-5">
+                                <Label> Password</Label>
+                                <Input  type="password" 
+                                        id="password"
+                                        placeholder="Password"
+                                        value={this.state.password}
+                                        onChange={this.onInputChange} />
+                            </FormGroup>
+                            <Button className="btn-lg   ml-5 mr-5">Log in</Button>
+                            <div className='text-center mt-3 mb-3'>
+                                <a href="\register">Sign up</a>
+                                <span className="p-2">|</span>
+                                <a href="/forgotpassword">Forgot Password</a>
+                            </div>
+                        </Form>
+                    </LoginContainer>
                 </div>
         );
     }
 }
 
 export default LogIn;
+
+const LoginContainer = styled.div`
+.body{
+    backgroun:#ffffff
+}
+.login-form{
+    width: 100%;
+    max-width: 600px;
+    margin-left: 25px;
+    margin: auto;
+    height: 500px;
+    margin-top:8%;
+    margin-bottom:10%;
+    background: rgb(147,50,158);
+    background: linear-gradient(90deg, rgba(147,50,158,1) 0%, rgba(180,174,232,1) 0%, rgba(255,227,254,1) 80%);
+  }
+`;
