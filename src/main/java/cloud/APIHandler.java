@@ -13,8 +13,6 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
 
 public class APIHandler implements RequestStreamHandler {
 
@@ -28,15 +26,11 @@ public class APIHandler implements RequestStreamHandler {
     private DynamoDB dynamoDb = new DynamoDB(client);
 
     private Timestamp get_timestamp(){
-        Date date= new Date();
-        long time = date.getTime();
-        return new Timestamp(time);
+        return new Timestamp(System.currentTimeMillis());
     }
     private Timestamp get_expiration_date(Timestamp from){
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(from.getTime());
-        cal.add(Calendar.SECOND, 604800);
-        return new Timestamp(cal.getTime().getTime());
+        Timestamp timestamp = new Timestamp(from.getTime() + (604800 * 1000));
+        return timestamp;
     }
     private boolean check_id(String short_id){
         Item item = dynamoDb.getTable(DYNAMODB_TABLE_NAME).getItem("short_id",short_id);
@@ -93,7 +87,8 @@ public class APIHandler implements RequestStreamHandler {
             }
 
             JSONObject responseBody = new JSONObject();
-            responseBody.put("short_id", short_url);
+            responseBody.put("short_id", short_id);
+            responseBody.put("short_url", short_url);
             responseBody.put("long_url", long_url.getLong_url());
 
             responseJson.put("statusCode", 200);
@@ -108,47 +103,4 @@ public class APIHandler implements RequestStreamHandler {
         writer.write(responseJson.toString());
         writer.close();
     }
-
-
-    public void handleGetByParam(InputStream inputStream, OutputStream outputStream, Context context) throws Exception {
-
-        JSONParser parser = new JSONParser();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        JSONObject responseJson = new JSONObject();
-
-        Item result = null;
-        try {
-            JSONObject event = (JSONObject) parser.parse(reader);
-            JSONObject responseBody = new JSONObject();
-            String short_id = (String) event.get("short_id");
-
-            if (short_id != null) {
-                result = dynamoDb.getTable(DYNAMODB_TABLE_NAME).getItem("short_id", short_id);
-            }
-            if (result != null) {
-                JSONObject url = new JSONObject();
-                String long_url = result.getString("long_url");
-                int count = result.getNumber("hits").intValue();
-                result.withNumber("hist", count + 1);
-                responseJson.put("statusCode", 301);
-                throw new Exception(new ResponseFound(long_url));
-            }
-            else {
-                Object message = "Page cannot be found!";
-                responseBody.put("message", message);
-                responseJson.put("statusCode", 404);
-            }
-
-            responseJson.put("body", responseBody.toString());
-
-        } catch (ParseException pex) {
-            responseJson.put("statusCode", 400);
-            responseJson.put("exception", pex);
-        }
-
-        OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
-        writer.write(responseJson.toString());
-        writer.close();
-    }
-
 }
