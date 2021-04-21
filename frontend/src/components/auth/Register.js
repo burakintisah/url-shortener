@@ -42,7 +42,7 @@ class Register extends Component {
                     email:email
                 }
             });
-            console.log(signUpResponse);
+            //console.log(signUpResponse);
 
             // redirecting to Welcome Page
             this.props.history.push('/welcome')

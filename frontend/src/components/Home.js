@@ -20,12 +20,12 @@ class Home extends Component {
               };
               var data = { long_url: this.state.longUrl}
               axios.post('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/create', data, options).then(res => {
-                console.log("RES data:",res) 
+                //console.log("RES data:",res) 
                 this.setState({shortUrl: res.data.short_url});   
             });
         }
         catch(error) {
-            console.log(error.message);
+            //console.log(error.message);
         }
     };
 
@@ -42,7 +42,7 @@ class Home extends Component {
             return <Redirect push to={'/login'} />
         }
 
-        console.log("in home : "+this.props.auth.user.signInUserSession.idToken.jwtToken);
+        //console.log("in home : "+this.props.auth.user.signInUserSession.idToken.jwtToken);
         return (
             <div  >
                 <HomeContainer>
