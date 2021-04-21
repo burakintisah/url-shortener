@@ -91,6 +91,10 @@ public class APIHandler implements RequestStreamHandler {
             responseBody.put("short_url", short_url);
             responseBody.put("long_url", long_url.getLong_url());
 
+            JSONObject headerJson = new JSONObject();
+            headerJson.put("Access-Control-Allow-Origin", "*");
+
+            responseJson.put("headers", headerJson);
             responseJson.put("statusCode", 200);
             responseJson.put("body", responseBody.toString());
 
