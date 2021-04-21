@@ -30,8 +30,6 @@ const WelcomeContainer = styled.div`
     height: 100%;
     height:300px;
     margin-bottom:10%;
-    background: rgb(147,50,158);
-    background: linear-gradient(90deg, rgba(147,50,158,1) 0%, rgba(180,174,232,1) 0%, rgba(255,227,254,1) 80%);
   }
   .header {
     width: 100%;
@@ -40,10 +38,7 @@ const WelcomeContainer = styled.div`
     margin: auto;
     height: 100%;
     height:100px;
-    margin-top:10%;
-    background: rgb(147,50,158);
-    background: linear-gradient(90deg, rgba(147,50,158,1) 0%, rgba(180,174,232,1) 0%, rgba(255,227,254,1) 80%);
-  
+    margin-top:10%;  
 }
 `;
 

@@ -91,23 +91,17 @@ const HomeContainer = styled.div`
     max-width: 1800px;
     margin: auto;
     height: 700px;
-    background: rgb(147,50,158);
-    background: linear-gradient(90deg, rgba(147,50,158,1) 0%, rgba(180,174,232,1) 0%, rgba(255,227,254,1) 80%);
   }
   .home2-form{
     width: 100%;
     max-width: 1800px;
     margin: auto;
     height: 50px;
-    background: rgb(147,50,158);
-    background: linear-gradient(90deg, rgba(147,50,158,1) 0%, rgba(180,174,232,1) 0%, rgba(255,227,254,1) 80%);
   }
   .home3-form{
     width: 100%;
     max-width: 1800px;
     margin: auto;
     height: 20px;
-    background: rgb(147,50,158);
-    background: linear-gradient(90deg, rgba(147,50,158,1) 0%, rgba(180,174,232,1) 0%, rgba(255,227,254,1) 80%);
   }
 `;

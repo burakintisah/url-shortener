@@ -135,7 +135,5 @@ const RegContainer = styled.div`
     height: 650px;
     margin-top:8%;
     margin-bottom:10%;
-    background: rgb(147,50,158);
-    background: linear-gradient(90deg, rgba(147,50,158,1) 0%, rgba(180,174,232,1) 0%, rgba(255,227,254,1) 80%);
   }
 `;

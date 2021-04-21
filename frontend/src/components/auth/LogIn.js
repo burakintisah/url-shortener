@@ -86,8 +86,7 @@ class LogIn extends Component {
                             <Button className="btn-lg   ml-5 mr-5">Log in</Button>
                             <div className='text-center mt-3 mb-3'>
                                 <a href="\register">Sign up</a>
-                                <span className="p-2">|</span>
-                                <a href="/forgotpassword">Forgot Password</a>
+                                
                             </div>
                         </Form>
                     </LoginContainer>
@@ -95,6 +94,11 @@ class LogIn extends Component {
         );
     }
 }
+
+/*
+<span className="p-2">|</span>
+                                <a href="/login">Forgot Password</a>
+*/
 
 export default LogIn;
 
@@ -106,8 +110,6 @@ const LoginContainer = styled.div`
     margin-left: 25px;
     margin: auto;
     height: 500px;
-    background: rgb(147,50,158);
-    background: linear-gradient(90deg, rgba(147,50,158,1) 0%, rgba(180,174,232,1) 0%, rgba(255,227,254,1) 80%);
   }
   .login-head{
     width: 100%;
@@ -116,7 +118,5 @@ const LoginContainer = styled.div`
     margin: auto;
     height: 100px;
     margin-top:8%;
-    background: rgb(147,50,158);
-    background: linear-gradient(90deg, rgba(147,50,158,1) 0%, rgba(180,174,232,1) 0%, rgba(255,227,254,1) 80%);
   }
 `;
