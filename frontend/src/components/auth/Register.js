@@ -71,6 +71,9 @@ class Register extends Component {
         return (
             <div className="container">
                 <RegContainer >
+                <Form className="login-form2 bk" >
+
+                </Form>
                         <Form className="login-form bk" onSubmit={this.handleSubmit}>
                             <h1 >URL Shortener</h1>
                             <h2>Sign Up</h2>

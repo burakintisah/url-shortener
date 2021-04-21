@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
@@ -36,8 +35,8 @@ class App extends Component {
         <Router>
           <div>
             <Switch>
-              <Route exact path="/" render= {(props) => <Home {...props} auth={authProps}/> }/>
               <Route exact path="/login" render= {(props) => <LogIn {...props} auth={authProps}/> }/>
+              <Route exact path="/" render= {(props) => <Home {...props} auth={authProps}/> }/>
               <Route exact path="/register" render= {(props) => <Register {...props} auth={authProps}/> }/>
               <Route exact path="/welcome" render= {(props) => <Welcome {...props} auth={authProps}/> }/>
             </Switch>

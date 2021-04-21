@@ -62,6 +62,7 @@ class LogIn extends Component {
         return (
                 <div className="container">
                     <LoginContainer >
+                        <Form className="login-head bk"></Form>
                         <Form className="login-form bk" onSubmit={this.handleSubmit}>
                             <h1 >URL Shortener</h1>
                             <h2>Login</h2>
@@ -98,17 +99,23 @@ class LogIn extends Component {
 export default LogIn;
 
 const LoginContainer = styled.div`
-.body{
-    backgroun:#ffffff
-}
+
 .login-form{
     width: 100%;
-    max-width: 600px;
+    max-width: 650px;
     margin-left: 25px;
     margin: auto;
     height: 500px;
+    background: rgb(147,50,158);
+    background: linear-gradient(90deg, rgba(147,50,158,1) 0%, rgba(180,174,232,1) 0%, rgba(255,227,254,1) 80%);
+  }
+  .login-head{
+    width: 100%;
+    max-width: 650px;
+    margin-left: 25px;
+    margin: auto;
+    height: 100px;
     margin-top:8%;
-    margin-bottom:10%;
     background: rgb(147,50,158);
     background: linear-gradient(90deg, rgba(147,50,158,1) 0%, rgba(180,174,232,1) 0%, rgba(255,227,254,1) 80%);
   }
