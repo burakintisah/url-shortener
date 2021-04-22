@@ -18,7 +18,8 @@ class Home extends Component {
                 headers: {'Authorization': this.props.auth.user.signInUserSession.idToken.jwtToken,
                 }
               };
-              var data = { long_url: this.state.longUrl}
+              var data = { long_url: this.state.longUrl, user_id: this.props.auth.user.attributes.sub}
+              //console.log(data);
               axios.post('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/create', data, options).then(res => {
                 //console.log("RES data:",res) 
                 this.setState({shortUrl: res.data.short_url});   

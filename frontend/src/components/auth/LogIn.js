@@ -35,6 +35,7 @@ class LogIn extends Component {
             this.props.auth.setAuthStatus(true);
             this.props.auth.setUser(user);
             // redirecting to Welcome Page
+            
             this.props.history.push('/')
 
         } catch (error) {
