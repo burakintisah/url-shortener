@@ -7,6 +7,9 @@ import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.spec.PutItemSpec;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -72,9 +75,11 @@ public class APIHandler implements RequestStreamHandler {
 
         try {
             JSONObject event = (JSONObject) parser.parse(reader);
-            LongURL long_url = new LongURL((String) event.get("body"));
+            LongURL long_url = new LongURL(event.get("body").toString());
 
-            if (event.get("body") != null) {
+            if (event.get("body") != null && event.get("authorization") != null) {
+                DecodedJWT jwt = JWT.decode((String)event.get("authorization"));
+                String user_id = jwt.getClaims().get("sub").toString();
 
                 dynamoDb.getTable(DYNAMODB_TABLE_NAME)
                         .putItem(new PutItemSpec().withItem(new Item().withString("short_id", short_id)
@@ -82,7 +87,7 @@ public class APIHandler implements RequestStreamHandler {
                                                     .withString("ttl", ttl.toString())
                                                     .withString("short_url", short_url)
                                                     .withString("long_url", long_url.getLong_url())
-                                                    .withString("user_id", long_url.getUserId())
+                                                    .withString("user_id", user_id)
                                                     .withNumber("hits", 0)));
             }
 
@@ -98,9 +103,9 @@ public class APIHandler implements RequestStreamHandler {
             responseJson.put("statusCode", 200);
             responseJson.put("body", responseBody.toString());
 
-        } catch (ParseException pex) {
+        } catch (ParseException | JWTDecodeException ex) {
             responseJson.put("statusCode", 400);
-            responseJson.put("exception", pex);
+            responseJson.put("exception", ex);
         }
 
         OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
