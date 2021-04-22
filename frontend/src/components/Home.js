@@ -21,10 +21,11 @@ class Home extends Component {
                 }
               };
               var data = { long_url: this.state.longUrl, user_id: this.props.auth.user.attributes.sub}
-              //console.log(data);
               axios.post('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/create', data, options).then(res => {
-                //console.log("RES data:",res) 
-                this.setState({shortUrl: res.data.short_url});   
+               // var myJSON = JSON.stringify(res.data.body);
+              console.log("RES data:",JSON.parse(res.data.body).short_url);
+                
+                this.setState({shortUrl: JSON.parse(res.data.body).short_url});   
             });
         }
         catch(error) {
@@ -82,7 +83,7 @@ class Home extends Component {
                     </Form>
                     
                     <Form className="home-form bk" onSubmit={this.handleSubmit}>
-                            <h6 className="head"> Enter a link:</h6>
+                            <h6> Enter a link:</h6>
                             <FormGroup className="mt-2 ml-5 mr-5">
                                 <Row>
                                     <Col sm="2"></Col>
@@ -98,8 +99,8 @@ class Home extends Component {
                             
                     </Form>
                     <Form className="home-form bk" hidden={!this.state.isCustom} onSubmit={this.handleSubmitCustom}>                            
-                            <h6 className="head2" hidden={!this.state.isCustom}> Enter a custom link:</h6>
-                            <FormGroup className="mt-5 ml-5 mr-5">
+                            <h6 hidden={!this.state.isCustom}> Enter a custom link:</h6>
+                            <FormGroup className="ml-5 mr-5">
                                 <Row>
                                     <Col sm="2"></Col>
                                     <Col sm="8"><Input  className=""
@@ -130,7 +131,7 @@ const HomeContainer = styled.div`
     width: 100%;
     max-width: 1800px;
     margin: auto;
-    margin-top:50px;
+    margin-top:40px;
   }
   .home2-form{
     width: 100%;
@@ -139,15 +140,4 @@ const HomeContainer = styled.div`
     height: 50px;
     margin-top: 30px;
   }
-
-.head {
-    position: absolute;
-    left: 19%;
-    top:13%;
-}
-.head2 {
-    position: absolute;
-    left: 19%;
-    top:25%;
-}
 `;
