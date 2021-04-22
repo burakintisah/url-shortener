@@ -29,8 +29,7 @@ public class APIHandler implements RequestStreamHandler {
         return new Timestamp(System.currentTimeMillis());
     }
     private Timestamp get_expiration_date(Timestamp from){
-        Timestamp timestamp = new Timestamp(from.getTime() + (604800 * 1000));
-        return timestamp;
+        return new Timestamp(from.getTime() + (604800 * 1000));
     }
     private boolean check_id(String short_id){
         Item item = dynamoDb.getTable(DYNAMODB_TABLE_NAME).getItem("short_id",short_id);
@@ -83,6 +82,7 @@ public class APIHandler implements RequestStreamHandler {
                                                     .withString("ttl", ttl.toString())
                                                     .withString("short_url", short_url)
                                                     .withString("long_url", long_url.getLong_url())
+                                                    .withString("user_id", long_url.getUserId())
                                                     .withNumber("hits", 0)));
             }
 
