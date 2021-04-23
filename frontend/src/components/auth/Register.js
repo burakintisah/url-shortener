@@ -145,3 +145,8 @@ const RegContainer = styled.div`
     font-size:10px;
 }
 `;
+
+
+
+
+
