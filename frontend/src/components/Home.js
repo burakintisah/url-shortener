@@ -14,6 +14,7 @@ class Home extends Component {
         customUrl: "",
         isCustom: false,
         isValidCustom: true,
+        getLinks:true,
         data: [],
         columns: [{
             name: 'Long URL',
@@ -48,6 +49,7 @@ class Home extends Component {
               var data = { long_url: this.state.longUrl}
             axios.post('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/create', data, options).then(res => {
                 this.setState({shortUrl: res.data.short_url});
+                this.setState({getLinks: true});
             });
             this.componentDidMount();
         }
@@ -68,8 +70,8 @@ class Home extends Component {
                   };
                   var data = { long_url: this.state.longUrl, user_id: this.props.auth.user.attributes.sub, custom_url: this.state.customUrl}
                   axios.post('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/create/custom', data, options).then(res => {
-                      console.log(res);
-                  this.setState({shortUrl: res.data.short_url});   
+                  this.setState({shortUrl: res.data.short_url}); 
+                  this.setState({getLinks: true});  
                 });
             }
             catch(error) {
@@ -95,20 +97,24 @@ class Home extends Component {
             return <Redirect push to={'/login'} />
         }
 
-        try{
-            //console.log(this.props.auth.user.signInUserSession.idToken.jwtToken)
-            const options = {
-                headers: {'Authorization': this.props.auth.user.signInUserSession.idToken.jwtToken,
-                }
-              };
-            axios.get('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/users/' + this.props.auth.user.attributes.sub + '/links', options).then(res => {
-                console.log(res.data);
-                this.setState({links: res.data}); 
-                this.setState({ data: res.data.urls })
-            });
-        }
-        catch{
-            console.log("get links error");
+        if(this.state.getLinks)
+        {
+            this.setState({getLinks: false});
+            try{
+                //console.log(this.props.auth.user.signInUserSession.idToken.jwtToken)
+                const options = {
+                    headers: {'Authorization': this.props.auth.user.signInUserSession.idToken.jwtToken,
+                    }
+                  };
+                axios.get('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/users/' + this.props.auth.user.attributes.sub + '/links', options).then(res => {
+                    console.log(res.data);
+                    this.setState({links: res.data}); 
+                    this.setState({ data: res.data.urls })
+                });
+            }
+            catch{
+                console.log("get links error");
+            }
         }
 
         return (
