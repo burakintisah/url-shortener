@@ -6,7 +6,6 @@ import { Button, Form, FormGroup, Input } from 'reactstrap';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
-import { MDBDataTableV5 } from 'mdbreact';
 
 class Home extends Component {
     state = {
