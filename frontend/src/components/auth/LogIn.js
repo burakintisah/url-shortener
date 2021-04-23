@@ -10,7 +10,8 @@ class LogIn extends Component {
         errors: {
             cognito: null,
             blankfield: false
-        }
+        },
+        isCorrect: true,
     };
 
     clearErrorState = () => {
@@ -20,12 +21,13 @@ class LogIn extends Component {
                 blankfield: false
             }
         });
+
+        this.setState({isCorrect:true});
     };
 
     handleSubmit = async event => {
         event.preventDefault();
 
-        // Form validation
         this.clearErrorState();
 
         // AWS Cognito integration here
@@ -35,7 +37,6 @@ class LogIn extends Component {
             this.props.auth.setAuthStatus(true);
             this.props.auth.setUser(user);
             // redirecting to Welcome Page
-            
             this.props.history.push('/')
 
         } catch (error) {
@@ -47,6 +48,8 @@ class LogIn extends Component {
                     cognito: error
                 }
             })
+
+            this.setState({isCorrect:false});
         }
     };
 
@@ -84,6 +87,13 @@ class LogIn extends Component {
                                         value={this.state.password}
                                         onChange={this.onInputChange} />
                             </FormGroup>
+                            <p className="warning"> 
+                                Password must be at least 8 characters and contain at least a number, a special character, a lower and an upper case character!
+                            </p>
+                            <p  className = "wrong"
+                                hidden = {this.state.isCorrect}>
+                                Username, email or password is incorrect!
+                            </p>
                             <Button className="btn-lg   ml-5 mr-5">Log in</Button>
                             <div className='text-center mt-3 mb-3'>
                                 <a href="\register">Sign up</a>
@@ -120,4 +130,14 @@ const LoginContainer = styled.div`
     height: 100px;
     margin-top:8%;
   }
+
+  .warning{
+      color: gray;
+      font-size:10px;
+  }
+
+  .wrong{
+    color: red;
+    font-size:12px;
+}
 `;

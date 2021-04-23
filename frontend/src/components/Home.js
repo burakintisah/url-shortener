@@ -22,10 +22,7 @@ class Home extends Component {
               };
               var data = { long_url: this.state.longUrl, user_id: this.props.auth.user.attributes.sub}
               axios.post('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/create', data, options).then(res => {
-               // var myJSON = JSON.stringify(res.data.body);
-              console.log("RES data:",JSON.parse(res.data.body).short_url);
-                
-                this.setState({shortUrl: JSON.parse(res.data.body).short_url});   
+                this.setState({shortUrl: res.data.short_url});   
             });
         }
         catch(error) {
