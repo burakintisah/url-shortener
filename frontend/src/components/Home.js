@@ -19,34 +19,22 @@ class Home extends Component {
             name: 'Long URL',
             selector: 'long_url',
             wrap: true,
-            attributes: {
-                'aria-controls': 'DataTable',
-                'aria-label': 'Name',
-              },
             },
             {
             name: 'Short Url',
             selector: 'short_url',
             maxWidth: "420px"
             },
+            {
+                name: 'Hit Count',
+                selector: 'hits',
+                maxWidth: "30px"
+            }
         ],
     }
 
     componentDidMount() {
-        try{
-            //console.log(this.props.auth.user.signInUserSession.idToken.jwtToken)
-            const options = {
-                headers: {'Authorization': this.props.auth.user.signInUserSession.idToken.jwtToken,
-                }
-              };
-            axios.get('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/users/' + this.props.auth.user.attributes.sub + '/links', options).then(res => {
-                this.setState({links: res.data}); 
-                this.setState({ data: res.data.urls })
-            });
-        }
-        catch{
-            console.log("get links error");
-        }
+        
       }
 
     handleSubmit = async event => {
@@ -105,6 +93,22 @@ class Home extends Component {
         if(!this.props.auth.isAuthenticated || !this.props.auth.user)
         {
             return <Redirect push to={'/login'} />
+        }
+
+        try{
+            //console.log(this.props.auth.user.signInUserSession.idToken.jwtToken)
+            const options = {
+                headers: {'Authorization': this.props.auth.user.signInUserSession.idToken.jwtToken,
+                }
+              };
+            axios.get('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/users/' + this.props.auth.user.attributes.sub + '/links', options).then(res => {
+                console.log(res.data);
+                this.setState({links: res.data}); 
+                this.setState({ data: res.data.urls })
+            });
+        }
+        catch{
+            console.log("get links error");
         }
 
         return (
