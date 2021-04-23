@@ -72,7 +72,12 @@ class _LoginScreenState extends State<LoginScreen> {
       if (res.isSignedIn) {
         CognitoAuthSession session = await Amplify.Auth.fetchAuthSession(
             options: CognitoSessionOptions(getAWSCredentials: true));
+        print("idToken: " + session.userPoolTokens.idToken);
+        // print("-------------\nacessToken: " + session.userPoolTokens.accessToken);
+
         AuthUser user = await Amplify.Auth.getCurrentUser();
+        print("-------------\nuserId: " + user.userId);
+
         ScaffoldMessenger.of(context)
             .showSnackBar(new SnackBar(content: Text("Signed In")));
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
@@ -84,6 +89,12 @@ class _LoginScreenState extends State<LoginScreen> {
         ScaffoldMessenger.of(context)
             .showSnackBar(new SnackBar(content: Text("Try again")));
       }
+    } on NotAuthorizedException catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(new SnackBar(content: Text(e.message)));
+    } on UserNotConfirmedException catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(new SnackBar(content: Text("Please verify your email by clicking the link we have sent to your email")));
     } on AmplifyException catch (e) {
       print(e);
       try {
@@ -175,6 +186,7 @@ class RoundedInputField extends StatelessWidget {
           hintStyle: TextStyle(color: Colors.white),
           border: InputBorder.none,
         ),
+        onEditingComplete: () => FocusScope.of(context).nextFocus(),
       ),
     );
   }

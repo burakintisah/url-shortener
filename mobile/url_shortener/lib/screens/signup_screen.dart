@@ -72,7 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Future<String> _registerUser() async {
+  void _registerUser() async {
     try {
       Map<String, String> userAttributes = {
         "email": email,
@@ -98,6 +98,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ScaffoldMessenger.of(context)
             .showSnackBar(new SnackBar(content: Text("Try again")));
       }
+    } on InvalidParameterException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+          content: Text("Please enter valid information: " + e.message)
+      ));
     } on AmplifyException catch (e) {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
@@ -171,6 +175,7 @@ class RoundedInputField extends StatelessWidget {
           hintStyle: TextStyle(color: Colors.white),
           border: InputBorder.none,
         ),
+        onEditingComplete: () => FocusScope.of(context).nextFocus(),
       ),
     );
   }
