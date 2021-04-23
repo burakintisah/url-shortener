@@ -103,11 +103,6 @@ class LogIn extends Component {
     }
 }
 
-/*
-<span className="p-2">|</span>
-                                <a href="/login">Forgot Password</a>
-*/
-
 export default LogIn;
 
 const LoginContainer = styled.div`

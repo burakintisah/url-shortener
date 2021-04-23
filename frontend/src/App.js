@@ -5,7 +5,7 @@ import Home from './components/Home';
 import LogIn from './components/auth/LogIn';
 import Register from './components/auth/Register';
 import Welcome from './components/auth/Welcome';
-
+import Notfound from './components/Notfound';
 class App extends Component {
 
   state = {
@@ -39,6 +39,7 @@ class App extends Component {
               <Route exact path="/" render= {(props) => <Home {...props} auth={authProps}/> }/>
               <Route exact path="/register" render= {(props) => <Register {...props} auth={authProps}/> }/>
               <Route exact path="/welcome" render= {(props) => <Welcome {...props} auth={authProps}/> }/>
+              <Route exact path="/notfound" render= {(props) => <Notfound {...props} auth={authProps}/> }/>
             </Switch>
           </div>
         </Router>
