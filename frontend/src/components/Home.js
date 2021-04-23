@@ -14,6 +14,7 @@ class Home extends Component {
         shortUrl: "",
         customUrl: "",
         isCustom: false,
+        isValidCustom: true,
         data: [],
         columns: [{
             name: 'Long URL',
@@ -34,6 +35,7 @@ class Home extends Component {
 
     componentDidMount() {
         try{
+            //console.log(this.props.auth.user.signInUserSession.idToken.jwtToken)
             const options = {
                 headers: {'Authorization': this.props.auth.user.signInUserSession.idToken.jwtToken,
                 }
@@ -41,7 +43,6 @@ class Home extends Component {
             axios.get('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/users/' + this.props.auth.user.attributes.sub + '/links', options).then(res => {
                 this.setState({links: res.data}); 
                 this.setState({ data: res.data.urls })
-                console.log("esra" + this.state.data.length)
             });
         }
         catch{
@@ -57,7 +58,7 @@ class Home extends Component {
                 headers: {'Authorization': this.props.auth.user.signInUserSession.idToken.jwtToken,
                 }
               };
-              var data = { long_url: this.state.longUrl, user_id: this.props.auth.user.attributes.sub}
+              var data = { long_url: this.state.longUrl}
             axios.post('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/create', data, options).then(res => {
                 this.setState({shortUrl: res.data.short_url});
             });
@@ -70,18 +71,23 @@ class Home extends Component {
 
     handleSubmitCustom = async event => {
         event.preventDefault();
-        try {
-            const options = {
-                headers: {'Authorization': this.props.auth.user.signInUserSession.idToken.jwtToken,
-                }
-              };
-              var data = { long_url: this.state.longUrl, user_id: this.props.auth.user.attributes.sub, custom_url: this.state.customUrl}
-              axios.post('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/create', data, options).then(res => {
-              this.setState({shortUrl: res.data.short_url});   
-            });
-        }
-        catch(error) {
-            //console.log(error.message);
+        if(this.state.customUrl.length >= 6  &&  this.state.customUrl.length <= 8)
+        {
+            //this.setState({isValidCustom: true});
+            try {
+                const options = {
+                    headers: {'Authorization': this.props.auth.user.signInUserSession.idToken.jwtToken,
+                    }
+                  };
+                  var data = { long_url: this.state.longUrl, user_id: this.props.auth.user.attributes.sub, custom_url: this.state.customUrl}
+                  axios.post('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/create/custom', data, options).then(res => {
+                      console.log(res);
+                  this.setState({shortUrl: res.data.short_url});   
+                });
+            }
+            catch(error) {
+                //console.log(error.message);
+            }
         }
     };
 
@@ -113,7 +119,6 @@ class Home extends Component {
                                 <Row>Hi {this.props.auth.user.username + ","}</Row>
                                 <Row><div><a href="/login" > Log Out</a></div></Row>
                             </Col>
-                            
                         </Row>
                     </Form>
                     
@@ -143,7 +148,11 @@ class Home extends Component {
                                         id="customUrl"
                                         placeholder="Custom Link"  
                                         value={this.state.customUrl}
-                                        onChange={this.onInputChange} /></Col>
+                                        onChange={this.onInputChange} />
+                                        <p className="warning"> 
+                                            Custom link length must be between 6 and 8.
+                                        </p>    
+                                    </Col>
                                     <Col sm="2"><Button className="btn-md mr-5">Create Custom Link</Button></Col>
                                 </Row>                                
                             </FormGroup>                            
@@ -186,4 +195,8 @@ const HomeContainer = styled.div`
     height: 50px;
     margin-top: 30px;
   }
+  .warning{
+    color: gray;
+    font-size:12px;
+}
 `;
