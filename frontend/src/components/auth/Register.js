@@ -113,6 +113,9 @@ class Register extends Component {
                                         value={this.state.confirmpassword}
                                         onChange={this.onInputChange} />
                             </FormGroup>
+                            <p className="warning"> 
+                                Password must be at least 8 characters and contain at least a number, a special character, a lower and an upper case character!
+                            </p>
                             <Button className="btn-lg   ml-5 mr-5">Sign Up</Button>
                             <div className='text-center mt-3 mb-3'>
                                 <a href="\login">Log in</a>
@@ -136,4 +139,9 @@ const RegContainer = styled.div`
     margin-top:8%;
     margin-bottom:10%;
   }
+
+  .warning{
+    color: gray;
+    font-size:10px;
+}
 `;

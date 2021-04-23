@@ -87,9 +87,6 @@ class LogIn extends Component {
                                         value={this.state.password}
                                         onChange={this.onInputChange} />
                             </FormGroup>
-                            <p className="warning"> 
-                                Password must be at least 8 characters and contain at least a number, a special character, a lower and an upper case character!
-                            </p>
                             <p  className = "wrong"
                                 hidden = {this.state.isCorrect}>
                                 Username, email or password is incorrect!
@@ -130,12 +127,6 @@ const LoginContainer = styled.div`
     height: 100px;
     margin-top:8%;
   }
-
-  .warning{
-      color: gray;
-      font-size:10px;
-  }
-
   .wrong{
     color: red;
     font-size:12px;
