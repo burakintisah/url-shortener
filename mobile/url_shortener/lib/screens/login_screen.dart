@@ -11,8 +11,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String username = "zemre";
-  String password = "123456789";
+  String username = "emre";
+  String password = "123456";
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +68,14 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       SignInResult res =
           await Amplify.Auth.signIn(username: username, password: password);
-      print(res.nextStep.signInStep);
       if (res.isSignedIn) {
         CognitoAuthSession session = await Amplify.Auth.fetchAuthSession(
             options: CognitoSessionOptions(getAWSCredentials: true));
-        print("idToken: " + session.userPoolTokens.idToken);
+        // print("idToken: " + session.userPoolTokens.idToken);
         // print("-------------\nacessToken: " + session.userPoolTokens.accessToken);
 
         AuthUser user = await Amplify.Auth.getCurrentUser();
-        print("-------------\nuserId: " + user.userId);
+        // print("-------------\nuserId: " + user.userId);
 
         ScaffoldMessenger.of(context)
             .showSnackBar(new SnackBar(content: Text("Signed In")));

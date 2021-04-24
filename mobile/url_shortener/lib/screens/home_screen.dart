@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       var url = Uri.parse(
           'https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/users/' + widget.user.userId.toString() + '/links');
-      print(url);
+
       var response = await http.get(url,
           headers: {'Authorization': widget.session.userPoolTokens.idToken});
 
@@ -45,11 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
         return null;
       }
 
-
       var jsonURLs = jsonDecode(response.body)['urls'];
       links = [];
       for (var url in jsonURLs) {
-        Link link = Link(url["short_url"], url["long_url"], url["hits"]);
+        Link link = Link(url["short_url"], url["long_url"], url["hits"], url["is_active"]);
         links.add(link);
       }
 
@@ -68,6 +67,19 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('All URLs'),
+        actions: <Widget> [
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {});
+                  },
+                  child: Icon(
+                    Icons.refresh
+                  ),
+              ),
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -121,6 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         longLink: snapshot.data[index].longLink,
                         shortLink: snapshot.data[index].shortLink,
                         hits: snapshot.data[index].hits,
+                        isActive: snapshot.data[index].isActive,
                       );
                     }
 
@@ -177,12 +190,14 @@ class LinkListTile extends StatelessWidget {
   final String longLink;
   final String shortLink;
   final int hits;
+  final bool isActive;
 
   const LinkListTile({
     Key key,
     this.longLink,
     this.shortLink,
     this.hits,
+    this.isActive,
   }) : super(key: key);
 
   @override
@@ -190,10 +205,20 @@ class LinkListTile extends StatelessWidget {
     Size size = MediaQuery
         .of(context)
         .size;
+    Color backColor;
+    Color textColor;
+    if (this.isActive) {
+      backColor = Colors.green[800];
+      textColor = Colors.white;
+    } else {
+      backColor = Colors.red;
+      textColor = Colors.white;
+    }
     return Card (
+        color: backColor,
         child: ListTile(
-          title: Text(this.longLink),
-          subtitle: Text(this.shortLink),
+          title: Text(this.longLink, style: TextStyle(color: textColor)),
+          subtitle: Text(this.shortLink, style: TextStyle(color: textColor)),
           onTap: (){
             Clipboard.setData(new ClipboardData(
                 text: shortLink));
@@ -201,7 +226,7 @@ class LinkListTile extends StatelessWidget {
                 .showSnackBar(new SnackBar(
                 content: Text("Copied")));
           },
-          trailing: Text("Hits: " + hits.toString()),
+          trailing: Text("Hits: " + hits.toString(), style: TextStyle(color: textColor)),
       )
     );
   }
@@ -211,11 +236,13 @@ class Link{
   final String shortLink;
   final String longLink;
   final int hits;
+  final bool isActive;
 
   Link(
     this.shortLink,
     this.longLink,
     this.hits,
+    this.isActive,
   );
 }
 
