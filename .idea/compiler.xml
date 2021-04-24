@@ -7,7 +7,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="LambdaRetrieve" />
+        <module name="url-shortener-function2" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="url-shortener-function2" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

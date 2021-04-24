@@ -11,10 +11,16 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class APIHandler {
 
     private static final String DYNAMODB_TABLE_NAME = "url_shortener_table";
+    private Timestamp get_timestamp(){
+        return new Timestamp(System.currentTimeMillis());
+    }
 
     public void handleGetByParam(InputStream inputStream, OutputStream outputStream) throws Exception {
 
@@ -33,25 +39,45 @@ public class APIHandler {
             if (short_id != null) {
                 result = dynamoDb.getTable(DYNAMODB_TABLE_NAME).getItem("short_id", short_id);
             }
-            if (result != null) {
-                String long_url = result.getString("long_url");
+            Boolean is_active = result.getBoolean("is_active");
+            String long_url = "";
+            if (result != null && is_active) {
+                long_url = result.getString("long_url");
                 int count = result.getNumber("hits").intValue();
+
+                String ttlString = result.getString("ttl");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+                Date parsedDate = dateFormat.parse(ttlString);
+                Timestamp ttl = new java.sql.Timestamp(parsedDate.getTime());
+                Timestamp timestamp = get_timestamp();
+
+
+                if (timestamp.after(ttl)){
+                    is_active = false;
+                }
+
+
+
                 UpdateItemSpec updateItemSpec = new UpdateItemSpec().withPrimaryKey("short_id", short_id)
-                                                .withUpdateExpression("set hits = :h")
-                                                .withValueMap(new ValueMap().withNumber(":h", count + 1))
+                                                .withUpdateExpression("set hits = :h , is_active=:a")
+                                                .withValueMap(new ValueMap().withNumber(":h", count + 1)
+                                                        .withBoolean(":a", is_active))
                                                 .withReturnValues(ReturnValue.UPDATED_NEW);
 
                 dynamoDb.getTable(DYNAMODB_TABLE_NAME).updateItem(updateItemSpec);
+
+
+
+            }
+            if(is_active){
                 responseJson.put("statusCode", 301);
                 throw new Exception(new ResponseFound(long_url));
             }
             else {
-                Object message = "Page cannot be found!";
-                responseBody.put("message", message);
-                responseJson.put("statusCode", 404);
+                long_url = "https://frontend.d2kmvlz3pn1yrn.amplifyapp.com/error";
+                responseJson.put("statusCode", 301);
+                throw new Exception(new ResponseFound(long_url));
             }
-
-            responseJson.put("body", responseBody.toString());
 
         } catch (ParseException pex) {
             responseJson.put("statusCode", 400);
