@@ -3,6 +3,9 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
+import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
+import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -33,7 +36,12 @@ public class APIHandler {
             if (result != null) {
                 String long_url = result.getString("long_url");
                 int count = result.getNumber("hits").intValue();
-                result.withNumber("hist", count + 1);
+                UpdateItemSpec updateItemSpec = new UpdateItemSpec().withPrimaryKey("short_id", short_id)
+                                                .withUpdateExpression("set hits = :h")
+                                                .withValueMap(new ValueMap().withNumber(":h", count + 1))
+                                                .withReturnValues(ReturnValue.UPDATED_NEW);
+
+                dynamoDb.getTable(DYNAMODB_TABLE_NAME).updateItem(updateItemSpec);
                 responseJson.put("statusCode", 301);
                 throw new Exception(new ResponseFound(long_url));
             }
