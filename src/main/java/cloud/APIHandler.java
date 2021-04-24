@@ -39,7 +39,7 @@ public class APIHandler implements RequestStreamHandler {
         return item != null;
     }
     private int get_random_number(int min, int max){
-        return min + (int) (Math.random() * (max + 1));
+        return min + (int) (Math.random() * (max - min + 1));
     }
 
     private String generate_random_string(){
@@ -79,7 +79,7 @@ public class APIHandler implements RequestStreamHandler {
 
             if (event.get("body") != null && event.get("authorization") != null) {
                 DecodedJWT jwt = JWT.decode((String)event.get("authorization"));
-                String user_id = jwt.getClaims().get("sub").toString();
+                String user_id = jwt.getClaims().get("sub").asString();
 
                 dynamoDb.getTable(DYNAMODB_TABLE_NAME)
                         .putItem(new PutItemSpec().withItem(new Item().withString("short_id", short_id)
@@ -91,17 +91,10 @@ public class APIHandler implements RequestStreamHandler {
                                                     .withNumber("hits", 0)));
             }
 
-            JSONObject responseBody = new JSONObject();
-            responseBody.put("short_id", short_id);
-            responseBody.put("short_url", short_url);
-            responseBody.put("long_url", long_url.getLong_url());
-
-            JSONObject headerJson = new JSONObject();
-            headerJson.put("Access-Control-Allow-Origin", "*");
-
-            responseJson.put("headers", headerJson);
+            responseJson.put("short_id", short_id);
+            responseJson.put("short_url", short_url);
+            responseJson.put("long_url", long_url.getLong_url());
             responseJson.put("statusCode", 200);
-            responseJson.put("body", responseBody.toString());
 
         } catch (ParseException | JWTDecodeException ex) {
             responseJson.put("statusCode", 400);
