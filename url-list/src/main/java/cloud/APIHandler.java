@@ -7,7 +7,9 @@ import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
+import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
+import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.auth0.jwt.JWT;
@@ -18,12 +20,18 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.io.*;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 
 public class APIHandler implements RequestStreamHandler{
 
     private static final String DYNAMODB_TABLE_NAME = "url_shortener_table";
     private static final String INDEX_NAME = "User-Index";
+    private Timestamp get_timestamp(){
+        return new Timestamp(System.currentTimeMillis());
+    }
 
     @Override
     public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context) throws IOException {
@@ -61,7 +69,38 @@ public class APIHandler implements RequestStreamHandler{
                         objFromArray.put("short_url", item.getString("short_url"));
                         objFromArray.put("long_url", item.getString("long_url"));
                         objFromArray.put("hits", item.getNumber("hits"));
-                        objFromArray.put("is_active", item.getBoolean("is_active"));
+
+
+                        boolean is_active = item.getBoolean("is_active");
+                        if (is_active){
+                            try {
+                                String ttlString = item.getString("ttl");
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+                                Date parsedDate = dateFormat.parse(ttlString);
+                                Timestamp ttl = new java.sql.Timestamp(parsedDate.getTime());
+                                Timestamp timestamp = get_timestamp();
+
+                                String short_id = item.getString("short_id");
+                                if (timestamp.after(ttl)){
+                                    is_active = false;
+
+                                    UpdateItemSpec updateItemSpec = new UpdateItemSpec().withPrimaryKey("short_id", short_id)
+                                            .withUpdateExpression("set is_active=:a")
+                                            .withValueMap(new ValueMap().withBoolean(":a", is_active))
+                                            .withReturnValues(ReturnValue.UPDATED_NEW);
+
+                                    dynamoDb.getTable(DYNAMODB_TABLE_NAME).updateItem(updateItemSpec);
+
+
+                                }
+                            }catch (java.text.ParseException e) {
+                                responseJson.put("statusCode", 400);
+                                responseJson.put("exception", e);
+                            }
+                        }
+
+
+                        objFromArray.put("is_active", is_active);
                         array.add(objFromArray);
 
                     }
