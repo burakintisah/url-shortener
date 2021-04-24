@@ -72,6 +72,7 @@ public class APIHandler implements RequestStreamHandler {
         String short_url = APPLICATION_URL + short_id;
         Timestamp timestamp = get_timestamp();
         Timestamp ttl = get_expiration_date(timestamp);
+        short_url = short_url.trim();
 
         try {
             JSONObject event = (JSONObject) parser.parse(reader);
@@ -88,12 +89,14 @@ public class APIHandler implements RequestStreamHandler {
                                                     .withString("short_url", short_url)
                                                     .withString("long_url", long_url.getLong_url())
                                                     .withString("user_id", user_id)
+                                                    .withBoolean("is_active", true)
                                                     .withNumber("hits", 0)));
             }
 
             responseJson.put("short_id", short_id);
             responseJson.put("short_url", short_url);
             responseJson.put("long_url", long_url.getLong_url());
+            responseJson.put("is_active", true);
             responseJson.put("statusCode", 200);
 
         } catch (ParseException | JWTDecodeException ex) {
