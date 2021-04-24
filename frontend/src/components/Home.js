@@ -29,7 +29,7 @@ class Home extends Component {
             {
                 name: 'Hit Count',
                 selector: 'hits',
-                maxWidth: "30px"
+                maxWidth: "20px"
             }
         ],
     }
@@ -101,14 +101,13 @@ class Home extends Component {
         {
             this.setState({getLinks: false});
             try{
-                console.log(this.props.auth.user)
+                //console.log(this.props.auth.user.signInUserSession.idToken.jwtToken)
                 const options = {
                     headers: {'Authorization': this.props.auth.user.signInUserSession.idToken.jwtToken,
                     }
                   };
                 axios.get('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/users/' + this.props.auth.user.attributes.sub + '/links', options).then(res => {
-                    console.log("esraa : "+ res);
-                    this.setState({links: res.data}); 
+                    //console.log(res);                    
                     this.setState({ data: res.data.urls })
                 });
             }
@@ -116,6 +115,29 @@ class Home extends Component {
                 console.log("get links error");
             }
         }
+
+        const conditionalRowStyles= [
+            {
+              when: row => row.is_active,
+              style: {
+                backgroundColor: 'rgba(63, 195, 128, 0.9)',
+                color: 'white',
+                '&:hover': {
+                  cursor: 'pointer',
+                },
+              },
+            },
+          ];
+
+          const conditionalRowStylesRed= [
+            {
+              when: row => !row.is_active,
+              style: {
+                backgroundColor: 'red',
+                color: 'white',
+              },
+            },
+          ];
 
         return (
             <div  >
@@ -180,6 +202,7 @@ class Home extends Component {
                             columns={this.state.columns}
                             data={this.state.data}
                             pagination paginationRowsPerPageOptions={[5, 10]}
+                            conditionalRowStyles={conditionalRowStyles}
                            />
                         </Col>
                         <Col sm="2"></Col>
