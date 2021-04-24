@@ -101,13 +101,13 @@ class Home extends Component {
         {
             this.setState({getLinks: false});
             try{
-                //console.log(this.props.auth.user.signInUserSession.idToken.jwtToken)
+                console.log(this.props.auth.user)
                 const options = {
                     headers: {'Authorization': this.props.auth.user.signInUserSession.idToken.jwtToken,
                     }
                   };
                 axios.get('https://83y4xh3vj5.execute-api.eu-central-1.amazonaws.com/test/users/' + this.props.auth.user.attributes.sub + '/links', options).then(res => {
-                    console.log(res.data);
+                    console.log("esraa : "+ res);
                     this.setState({links: res.data}); 
                     this.setState({ data: res.data.urls })
                 });

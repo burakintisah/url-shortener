@@ -13,7 +13,9 @@ class Register extends Component {
             cognito: null,
             blankfield: false,
             passwordmatch: false
-        }
+        },
+        isSamePass : true,
+        isValid: true,
     }
 
     clearErrorState = () => {
@@ -33,29 +35,38 @@ class Register extends Component {
         this.clearErrorState();
 
         // AWS Cognito integration here
-        const { username, email, password } = this.state;
-        try {
-            const signUpResponse = await Auth.signUp ({
-                username,
-                password,
-                attributes: {
-                    email:email
-                }
-            });
-            //console.log(signUpResponse);
-
-            // redirecting to Welcome Page
-            this.props.history.push('/welcome')
-
-        } catch (error) {
-            let err = null;
-            !error.message ? err = {"message": error} : err= error;
-            this.setState ({
-                errors: {
-                    ...this.state.errors,
-                    cognito: error
-                }
-            })
+        const { username, email, password, confirmpassword } = this.state;
+        if(password != confirmpassword)
+        {
+            this.setState({isSamePass:false});
+        }
+        else{
+            this.setState({isSamePass:true});
+            try {
+                const signUpResponse = await Auth.signUp ({
+                    username,
+                    password,
+                    attributes: {
+                        email:email
+                    }
+                });
+                //console.log(signUpResponse);
+    
+                // redirecting to Welcome Page
+                this.setState({isValid: true});
+                this.props.history.push('/welcome')
+    
+            } catch (error) {
+                this.setState({isValid: false});
+                let err = null;
+                !error.message ? err = {"message": error} : err= error;
+                this.setState ({
+                    errors: {
+                        ...this.state.errors,
+                        cognito: error
+                    }
+                })
+            }
         }
 
     };
@@ -113,6 +124,12 @@ class Register extends Component {
                                         value={this.state.confirmpassword}
                                         onChange={this.onInputChange} />
                             </FormGroup>
+                            <p hidden={this.state.isSamePass} className="pass"> 
+                                Passwords are different!
+                            </p>
+                            <p hidden={this.state.isValid} className="pass"> 
+                                Email or username is taken, try another!
+                            </p>
                             <p className="warning"> 
                                 Password must be at least 8 characters and contain at least a number, a special character, a lower and an upper case character!
                             </p>
@@ -139,8 +156,11 @@ const RegContainer = styled.div`
     margin-top:8%;
     margin-bottom:10%;
   }
-
-  .warning{
+.pass{
+    color: red;
+    font-size: 11px;
+}
+.warning{
     color: #90caf9;
     font-size:10px;
 }
