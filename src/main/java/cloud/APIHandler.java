@@ -74,7 +74,7 @@ public class APIHandler {
                 throw new Exception(new ResponseFound(long_url));
             }
             else {
-                long_url = "https://frontend.d2kmvlz3pn1yrn.amplifyapp.com/error";
+                long_url = "https://frontend.d2kmvlz3pn1yrn.amplifyapp.com/notfound";
                 responseJson.put("statusCode", 301);
                 throw new Exception(new ResponseFound(long_url));
             }
