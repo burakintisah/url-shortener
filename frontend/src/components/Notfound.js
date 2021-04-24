@@ -10,22 +10,14 @@ export default function Notfound() {
             </div>
         </NotfoundContainer>
       <NotfoundContainer>
-        <div className="not-mid">
-            <Row>
-                <Col sm="3"></Col>
-                <Col sm="4">
-                    <Row>
-                      <h1>URL SHORTENER</h1>
-                    <Col sm="4"></Col>
-                    <Col sm="1"> 
-                        <Row className="mt-5"><h1>404 </h1></Row>
-                        <Row><h3>SORRY!</h3></Row>
-                    </Col>
-                    </Row>
-                    <Row><h6>The Page You're Looking For Was Not Found :(</h6></Row>
-                </Col>
-                <Col sm="4"></Col>
-            </Row>
+      <div className="not-mid">
+            <h1 className="white">URL SHORTENER</h1>
+            <h2 className="white" >404</h2>
+            <h5 className="white" >SORRY!</h5>
+            <p className="white">The Page You're Looking For Was Not Found :(</p>
+            <div className='text-center'>
+            <a href="\login" className="linkColor">Log in</a>
+        </div>
         </div>
       </NotfoundContainer>
     </div>
@@ -53,6 +45,13 @@ const NotfoundContainer = styled.div`
     margin: auto;
     height: 100%;
     height:100px;
+}
+
+.white{
+  color: white;
+}
+.linkColor{
+  color: #90caf9;
 }
 `;
 

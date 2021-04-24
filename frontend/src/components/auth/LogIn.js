@@ -68,10 +68,10 @@ class LogIn extends Component {
                     <LoginContainer >
                         <Form className="login-head bk"></Form>
                         <Form className="login-form bk" onSubmit={this.handleSubmit}>
-                            <h1 >URL Shortener</h1>
-                            <h2>Login</h2>
+                            <h1 className="white" >URL Shortener</h1>
+                            <h2 className="white"> Login</h2>
                             <FormGroup className="mt-5 ml-5 mr-5">
-                                <Label> Enter username or email</Label>
+                                <Label className="white"> Enter username or email</Label>
                                 <Input  className=""
                                         type="text" 
                                         id="username"
@@ -80,7 +80,7 @@ class LogIn extends Component {
                                         onChange={this.onInputChange} />
                             </FormGroup>
                             <FormGroup className="ml-5 mr-5">
-                                <Label> Password</Label>
+                                <Label className="white"> Password</Label>
                                 <Input  type="password" 
                                         id="password"
                                         placeholder="Password"
@@ -91,9 +91,9 @@ class LogIn extends Component {
                                 hidden = {this.state.isCorrect}>
                                 Username, email or password is incorrect!
                             </p>
-                            <Button className="btn-lg   ml-5 mr-5">Log in</Button>
+                            <Button className="btn-lg btn  ml-5 mr-5">Log in</Button>
                             <div className='text-center mt-3 mb-3'>
-                                <a href="\register">Sign up</a>
+                                <a className="linkColor" href="\register">Sign up</a>
                                 
                             </div>
                         </Form>
@@ -125,5 +125,14 @@ const LoginContainer = styled.div`
   .wrong{
     color: red;
     font-size:12px;
+}
+.white{
+    color: white;
+}
+.linkColor{
+    color: #90caf9;
+}
+.btn {
+    background: #64b5f6;
 }
 `;

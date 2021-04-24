@@ -122,17 +122,17 @@ class Home extends Component {
                 <HomeContainer>
                     <Form className="home2-form bk">
                         <Row>
-                            <Col sm="3"><h1>URL Shortener</h1></Col>
+                            <Col sm="3"><h1 className="white">URL Shortener</h1></Col>
                             <Col sm="8"></Col>
                             <Col sm="1">
-                                <Row>Hi {this.props.auth.user.username + ","}</Row>
-                                <Row><div><a href="/login" > Log Out</a></div></Row>
+                                <Row className="white">Hi {this.props.auth.user.username + ","}</Row>
+                                <Row><div><a href="/login" className="linkColor" > Log Out</a></div></Row>
                             </Col>
                         </Row>
                     </Form>
                     
                     <Form className="home-form bk" onSubmit={this.handleSubmit}>
-                            <h6> Enter a link:</h6>
+                            <p className="white"> Enter a link:</p>
                             <FormGroup className="mt-2 ml-5 mr-5">
                                 <Row>
                                     <Col sm="2"></Col>
@@ -142,13 +142,13 @@ class Home extends Component {
                                         placeholder="Link"  
                                         value={this.state.longUrl}
                                         onChange={this.onInputChange} /></Col>
-                                    <Col sm="2"><Button className="btn-md mr-5">Shorten</Button></Col>
+                                    <Col sm="2"><Button className="btn-md btn mr-5">Shorten</Button></Col>
                                 </Row>                                
                             </FormGroup>
                             
                     </Form>
                     <Form className="home-form bk" hidden={!this.state.isCustom} onSubmit={this.handleSubmitCustom}>                            
-                            <h6 hidden={!this.state.isCustom}> Enter a custom link:</h6>
+                            <p className="white" hidden={!this.state.isCustom}> https://d36euqp7ddsjbp.cloudfront.net/t/ </p>
                             <FormGroup className="ml-5 mr-5">
                                 <Row>
                                     <Col sm="2"></Col>
@@ -162,13 +162,13 @@ class Home extends Component {
                                             Custom link length must be between 6 and 8.
                                         </p>    
                                     </Col>
-                                    <Col sm="2"><Button className="btn-md mr-5">Create Custom Link</Button></Col>
+                                    <Col sm="2"><Button className="btn-md btn mr-5">Create Custom Link</Button></Col>
                                 </Row>                                
                             </FormGroup>                            
                     </Form>
                     <Row>
                         <Col sm="2"></Col>
-                        <Col sm="8"> <h6 hidden={this.state.shortUrl === ""}>Shortened URL:</h6> {" " + this.state.shortUrl} </Col>
+                        <Col sm="8"> <p className="white" hidden={this.state.shortUrl === ""}>Shortened URL:  {" " + this.state.shortUrl}  </p> </Col>
                         <Col sm="2"> <Button className="btn-md mr-5" hidden = {this.state.isCustom} onClick={this.handleCustom}> Create Custom Link</Button> </Col>
                     </Row>
                 </HomeContainer>
@@ -205,7 +205,16 @@ const HomeContainer = styled.div`
     margin-top: 30px;
   }
   .warning{
-    color: gray;
+    color: #90caf9;
     font-size:12px;
+}
+.white{
+    color: white;
+}
+.linkColor{
+    color: #90caf9;
+}
+.btn {
+    background: #64b5f6;
 }
 `;

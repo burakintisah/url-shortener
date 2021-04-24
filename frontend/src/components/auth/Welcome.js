@@ -12,11 +12,11 @@ export default function Welcome() {
       </WelcomeContainer>
       <WelcomeContainer>
         <div className="welcome-mid">
-            <h1>Welcome!</h1>
-            <p>You have successfully registered a new account.</p>
-            <p>We've sent you an email. Please check email.</p>
+            <h1 className="white">Welcome!</h1>
+            <p className="white" >You have successfully registered a new account.</p>
+            <p className="white" >We've sent you an email. Please check email.</p>
             <div className='text-center'>
-            <a href="\login">Log in</a>
+            <a href="\login" className="linkColor">Log in</a>
         </div>
         </div>
       </WelcomeContainer>
@@ -42,6 +42,13 @@ const WelcomeContainer = styled.div`
     height: 100%;
     height:100px;
     margin-top:10%;  
+}
+
+.white{
+  color: white;
+}
+.linkColor{
+  color: #90caf9;
 }
 `;
 

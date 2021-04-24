@@ -75,10 +75,10 @@ class Register extends Component {
 
                 </Form>
                         <Form className="login-form bk" onSubmit={this.handleSubmit}>
-                            <h1 >URL Shortener</h1>
-                            <h2>Sign Up</h2>
+                            <h1 className="white">URL Shortener</h1>
+                            <h2 className="white">Sign Up</h2>
                             <FormGroup className="mt-5 ml-5 mr-5">
-                                <Label> Username</Label>
+                                <Label className="white"> Username</Label>
                                 <Input  className="input"
                                         type="text" 
                                         id="username"
@@ -87,7 +87,7 @@ class Register extends Component {
                                         onChange={this.onInputChange} />
                             </FormGroup>
                             <FormGroup className="ml-5 mr-5">
-                                <Label> Email</Label>
+                                <Label className="white"> Email</Label>
                                 <Input  className="input"
                                         type="email" 
                                         id="email"
@@ -96,7 +96,7 @@ class Register extends Component {
                                         onChange={this.onInputChange} />
                             </FormGroup>
                             <FormGroup className="ml-5 mr-5">
-                                <Label> Password</Label>
+                                <Label className="white"> Password</Label>
                                 <Input  className="input"
                                         type="password" 
                                         id="password"
@@ -105,7 +105,7 @@ class Register extends Component {
                                         onChange={this.onInputChange} />
                             </FormGroup>
                             <FormGroup className="ml-5 mr-5">
-                                <Label> Confirm Password</Label>
+                                <Label className="white"> Confirm Password</Label>
                                 <Input  className="input"
                                         type="password" 
                                         id="confirmpassword"
@@ -116,9 +116,9 @@ class Register extends Component {
                             <p className="warning"> 
                                 Password must be at least 8 characters and contain at least a number, a special character, a lower and an upper case character!
                             </p>
-                            <Button className="btn-lg   ml-5 mr-5">Sign Up</Button>
+                            <Button className="btn-lg  btn ml-5 mr-5">Sign Up</Button>
                             <div className='text-center mt-3 mb-3'>
-                                <a href="\login">Log in</a>
+                                <a href="\login" className="linkColor">Log in</a>
                             </div>
                         </Form>
                     </RegContainer>            
@@ -141,8 +141,17 @@ const RegContainer = styled.div`
   }
 
   .warning{
-    color: gray;
+    color: #90caf9;
     font-size:10px;
+}
+.white{
+    color: white;
+}
+.linkColor{
+    color: #90caf9;
+}
+.btn {
+    background: #64b5f6;
 }
 `;
 
