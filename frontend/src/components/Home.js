@@ -184,7 +184,7 @@ class Home extends Component {
                                             Custom link length must be between 6 and 8.
                                         </p>    
                                     </Col>
-                                    <Col sm="2"><Button className="btn-md btn">Create Custom Link</Button></Col>
+                                    <Col sm="1"><Button className="btn-md btn mr-5">Create Custom Link</Button></Col>
                                 </Row>                                
                             </FormGroup>                            
                     </Form>
