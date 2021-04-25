@@ -63,6 +63,9 @@ public class APIHandler implements RequestStreamHandler{
                     Iterator<Item> iterator = items.iterator();
 
                     JSONArray array = new JSONArray();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+                    Timestamp timestamp = get_timestamp();
+
                     while (iterator.hasNext()) {
                         JSONObject objFromArray = new JSONObject();
                         Item item = iterator.next();
@@ -75,10 +78,8 @@ public class APIHandler implements RequestStreamHandler{
                         if (is_active){
                             try {
                                 String ttlString = item.getString("ttl");
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
                                 Date parsedDate = dateFormat.parse(ttlString);
                                 Timestamp ttl = new java.sql.Timestamp(parsedDate.getTime());
-                                Timestamp timestamp = get_timestamp();
 
                                 String short_id = item.getString("short_id");
                                 if (timestamp.after(ttl)){
