@@ -84,10 +84,6 @@ class Home extends Component {
         this.setState({isCustom:true});
     }
 
-    handleDashboard = event =>{
-        this.props.history.push('/dashboard')
-    }
-
     onInputChange = event => {
         this.setState({
             [event.target.id]: event.target.value
@@ -153,7 +149,6 @@ class Home extends Component {
                             <Col sm="1">
                                 <Row className="white">Hi {this.props.auth.user.username + ","}</Row>
                                 <Row><div><a href="/login" className="linkColor" > Log Out</a></div></Row>
-                                <Row><Button size="sm" className="btn2 mt-2" onClick={this.handleDashboard}> Dashboard </Button></Row>
                             </Col>
                         </Row>
                     </Form>
@@ -244,8 +239,5 @@ const HomeContainer = styled.div`
 }
 .btn {
     background: #64b5f6;
-}
-.btn2{
-    background: #1976d2;
 }
 `;

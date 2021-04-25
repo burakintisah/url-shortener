@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Auth } from "aws-amplify"
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import styled from 'styled-components'
-
+import {Col, Row } from 'reactstrap';
 class LogIn extends Component {
     state = {
         username: "",
@@ -61,43 +61,53 @@ class LogIn extends Component {
         document.getElementById(event.target.id);
     };
 
+    handleDashboard = event =>{
+        this.props.history.push('/dashboard')
+    }
 
     render() {
         return (
-                <div className="container">
-                    <LoginContainer >
-                        <Form className="login-head bk"></Form>
-                        <Form className="login-form bk" onSubmit={this.handleSubmit}>
-                            <h1 className="white" >URL Shortener</h1>
-                            <h2 className="white"> Login</h2>
-                            <FormGroup className="mt-5 ml-5 mr-5">
-                                <Label className="white"> Enter username or email</Label>
-                                <Input  className=""
-                                        type="text" 
-                                        id="username"
-                                        placeholder="Username or Email"  
-                                        value={this.state.username}
-                                        onChange={this.onInputChange} />
-                            </FormGroup>
-                            <FormGroup className="ml-5 mr-5">
-                                <Label className="white"> Password</Label>
-                                <Input  type="password" 
-                                        id="password"
-                                        placeholder="Password"
-                                        value={this.state.password}
-                                        onChange={this.onInputChange} />
-                            </FormGroup>
-                            <p  className = "wrong"
-                                hidden = {this.state.isCorrect}>
-                                Username, email or password is incorrect!
-                            </p>
-                            <Button className="btn-lg btn  ml-5 mr-5">Log in</Button>
-                            <div className='text-center mt-3 mb-3'>
-                                <a className="linkColor" href="\register">Sign up</a>
-                                
-                            </div>
-                        </Form>
-                    </LoginContainer>
+                <div >
+                    <Row>
+                        <Col sm="2"></Col>
+                        <Col sm="8">
+                            <LoginContainer >
+                                <Form className="login-head bk"></Form>
+                                <Form className="login-form bk" onSubmit={this.handleSubmit}>
+                                    <h1 className="white" >URL Shortener</h1>
+                                    <h2 className="white"> Login</h2>
+                                    <FormGroup className="mt-5 ml-5 mr-5">
+                                        <Label className="white"> Enter username or email</Label>
+                                        <Input  className=""
+                                                type="text" 
+                                                id="username"
+                                                placeholder="Username or Email"  
+                                                value={this.state.username}
+                                                onChange={this.onInputChange} />
+                                    </FormGroup>
+                                    <FormGroup className="ml-5 mr-5">
+                                        <Label className="white"> Password</Label>
+                                        <Input  type="password" 
+                                                id="password"
+                                                placeholder="Password"
+                                                value={this.state.password}
+                                                onChange={this.onInputChange} />
+                                    </FormGroup>
+                                    <p  className = "wrong"
+                                        hidden = {this.state.isCorrect}>
+                                        Username, email or password is incorrect!
+                                    </p>
+                                    <Button className="btn-lg btn  ml-5 mr-5">Log in</Button>
+                                    <div className='text-center mt-3 mb-3'>
+                                        <a className="linkColor" href="\register">Sign up</a>
+                                        
+                                    </div>
+                                </Form>
+                            </LoginContainer>
+                        </Col>
+                        <Col sm="2"><Button color="primary" size="sm" className="mt-4" onClick={this.handleDashboard}> Dashboard </Button></Col>
+                    </Row>
+                    
                 </div>
         );
     }
@@ -110,14 +120,13 @@ const LoginContainer = styled.div`
 .login-form{
     width: 100%;
     max-width: 650px;
-    margin-left: 25px;
     margin: auto;
     height: 500px;
   }
   .login-head{
     width: 100%;
     max-width: 650px;
-    margin-left: 25px;
+    
     margin: auto;
     height: 100px;
     margin-top:8%;
